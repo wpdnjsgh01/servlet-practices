@@ -24,7 +24,7 @@ public class GuestbookDao {
 			
 			//3. SQL 준비
 			String sql = 
-				"   select no, name, password, message, ref_date" +
+				"   select no, name, password, message, reg_date" +
 				"     from guestbook" +
 				" order by no desc";
 			pstmt = conn.prepareStatement(sql);

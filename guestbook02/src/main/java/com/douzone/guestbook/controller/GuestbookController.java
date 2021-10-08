@@ -1,6 +1,7 @@
 package com.douzone.guestbook.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,21 +15,24 @@ import com.douzone.guestbook.vo.GuestbookVo;
 
 @WebServlet("/")
 public class GuestbookController extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("utf-8");
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
-		rd.forward(request, response);
-		
-		String action = request.getParameter("add");
-		
-		if("add".equals(action)) {
-			System.out.println("123");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+		request.setCharacterEncoding("utf-8");
+
+		String action = request.getParameter("hidden");
+
+		if ("delete".equals(action)) {
+			System.out.println("delete");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
+			rd.forward(request, response);
+
+		} else if ("add".equals(action)) {
+			
+			System.out.println("asdf");
 			String name = request.getParameter("name");
 			String password = request.getParameter("password");
 			String message = request.getParameter("message");
@@ -40,14 +44,23 @@ public class GuestbookController extends HttpServlet {
 
 			new GuestbookDao().insert(vo);
 
-			response.sendRedirect("/guestbook02/");
+			response.sendRedirect("/guestbook02/gb");
 			
+		} else {
+			GuestbookDao dao = new GuestbookDao();
+			List<GuestbookVo> list = dao.findAll();
+
+			request.setAttribute("list", list);
+
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/index.jsp");
+			rd.forward(request, response);
 		}
-		
+
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 }
